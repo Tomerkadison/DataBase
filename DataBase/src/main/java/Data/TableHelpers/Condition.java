@@ -1,4 +1,4 @@
-package Data;
+package Data.TableHelpers;
 
 public class Condition {
     private String value1;

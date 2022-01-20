@@ -1,12 +1,13 @@
 import Data.DataBase;
+import Data.DataBaseHelpers.DataBaseFileHandler;
 import Data.Table;
+import Data.TableHelpers.TableSearcher;
+import Data.TableHelpers.TableShower;
 
 public class Main {
     public static void main(String[] args) {
         DataBase dataBase = new DataBase("dataDir");
-        Table people = dataBase.getTable("people");
-        people.show();
-        people.insert(new String[]{"itay","12","10/11/2009"});
-        people.show();
+        Table table = dataBase.getTable("people");
+        table.insert(new String[]{ "aba","48","23/04/1973"} );
     }
 }
