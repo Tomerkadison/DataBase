@@ -16,10 +16,10 @@ public class DataBase {
             tablesDir.mkdirs();
         } else {
             for (File tableFile : tablesDir.listFiles()) {
-                String tableName = tableFile.getName();
+                String tableName = tableFile.getName().substring(0,tableFile.getName().length()-4);
                 HashMap<String, HashMap<String, Object>> records = this.readTableFromFile(tableName);
                 readMetaData();
-                this.tables.put(tableFile.getName(),new Table(String.valueOf(this.metaData.get(tableName).get("name"))
+                this.tables.put(tableName,new Table(String.valueOf(this.metaData.get(tableName).get("name"))
                         ,String.valueOf(this.metaData.get(tableName).get("primaryKeyName"))
                         , parseToString(tableName,"stringParameters")
                         , parseToString(tableName,"types")));
@@ -61,7 +61,7 @@ public class DataBase {
             tableMetaData.put("primaryKeyName", this.tables.get(tableName).getPrimaryKeyName());
             tableMetaData.put("stringParameters",(Object[]) this.tables.get(tableName).getParametersToTypes().keySet().toArray());
             tableMetaData.put("types", (Object[]) this.tables.get(tableName).getParametersToTypes().values().toArray());
-            this.metaData.put(tableName+".txt", tableMetaData);
+            this.metaData.put(tableName, tableMetaData);
         }
         saveMetaData();
     }
@@ -75,7 +75,7 @@ public class DataBase {
     }
 
     public HashMap<String, HashMap<String, Object>> readTableFromFile(String tableName) {
-        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(this.name + "/" +tableName))) {
+        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(this.name + "/" +tableName +".txt"))) {
             return (HashMap<String, HashMap<String, Object>>) is.readObject();
         } catch (IOException e) {
             e.printStackTrace();

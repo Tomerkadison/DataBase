@@ -4,6 +4,9 @@ import Data.Table;
 public class Main {
     public static void main(String[] args) {
         DataBase dataBase = new DataBase("dataDir");
-        dataBase.showTable("people.txt");
+        Table people = dataBase.getTable("people");
+        people.show();
+        people.insert(new String[]{"itay","12","10/11/2009"});
+        people.show();
     }
 }
