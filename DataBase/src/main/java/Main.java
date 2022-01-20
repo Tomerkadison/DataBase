@@ -8,6 +8,10 @@ public class Main {
     public static void main(String[] args) {
         DataBase dataBase = new DataBase("dataDir");
         Table table = dataBase.getTable("people");
-        table.insert(new String[]{ "aba","48","23/04/1973"} );
+        for (int i =1;i<=90;i++){
+            table.insert(new String[]{ String.valueOf(i),String.valueOf(i),"23/04/1973"} );
+        }
+        table.addNewHashIndex("age");
+        table.findByIndex("age","18");
     }
 }

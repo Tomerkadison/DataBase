@@ -1,5 +1,6 @@
 package Data;
 
+import Data.TableHelpers.TableShower;
 import Data.TableHelpers.TypeCast;
 
 import java.util.ArrayList;
@@ -11,8 +12,7 @@ public class Table {
     private ArrayList<String> parameters;
     private HashMap<String, HashMap<String, Object>> records = new HashMap<>();
     private String primaryKeyName;
-    private int amount = 0;
-
+    private HashMap<String,HashMap<Integer, ArrayList<String>>> indexes = new HashMap<>();
     Table(String name, String primaryKeyName, String[] stringParameters, String[] types) {
         this.parameters = new ArrayList<String>(List.of(stringParameters));
         for (int i = 0; i < stringParameters.length; i++) {
@@ -28,6 +28,7 @@ public class Table {
             record.put(parameter, new TypeCast().cast(this.parametersToTypes.get(parameter), values[i]));
         }
         this.records.put((String) record.get(primaryKeyName), record);
+
     }
 
     public void insert(String[] values) {
@@ -67,6 +68,28 @@ public class Table {
     public ArrayList<String> getParameters() {
         return parameters;
     }
+
+    public void addNewHashIndex(String parameter){
+        HashMap<Integer,ArrayList<String>> valueToPrimaryKeys = new HashMap<>();
+        for(String key : this.records.keySet()){
+            HashMap<String, Object> record = this.records.get(key);
+            if(!valueToPrimaryKeys.containsKey(record.get(parameter).hashCode())){
+                ArrayList<String> bucket = new ArrayList<String>();
+                bucket.add(key);
+                valueToPrimaryKeys.put(record.get(parameter).hashCode(),bucket);
+            }else {
+                valueToPrimaryKeys.get(record.get(parameter).hashCode()).add(key);
+            }
+        }
+        this.indexes.put(parameter,valueToPrimaryKeys);
+    }
+
+    public void findByIndex(String parameter,Object wantedValue){
+        for (String primaryKey :this.indexes.get(parameter).get(wantedValue.hashCode())){
+            new TableShower(this).showRecordByPrimaryKey(primaryKey);
+        }
+    }
+
 }
 
 

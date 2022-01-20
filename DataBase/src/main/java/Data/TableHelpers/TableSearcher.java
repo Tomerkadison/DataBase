@@ -47,7 +47,7 @@ public class TableSearcher {
                 }
                 if (total) {
                     this.tableShower.showRecordByPrimaryKey((String) record.get(this.table.getPrimaryKeyName()));
-
+                    System.out.println("\n");
                 }
             }
         }
